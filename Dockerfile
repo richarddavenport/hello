@@ -15,8 +15,8 @@ ENV MIX_ENV=prod
 WORKDIR /app
 
 # Install hex and rebar
-RUN mix local.hex --force && \
-    mix local.rebar --force
+RUN mix local.hex --force --if-missing && \
+    mix local.rebar --force --if-missing
 
 # Copy mix files
 COPY mix.exs mix.lock ./
