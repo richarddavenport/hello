@@ -1,0 +1,39 @@
+# Development files
+.git
+.gitignore
+README.md
+CLAUDE.md
+
+# Build artifacts
+_build
+deps
+node_modules
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Coverage reports
+cover
+
+# Temporary files
+tmp
+temp

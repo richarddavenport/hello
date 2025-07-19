@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: hello:latest
+    environment:
+      - MIX_ENV=prod
+      - PORT=4000
+      - PHX_SERVER=true
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-supersecretkey}
+      - DATABASE_PATH=/app/data/hello_prod.db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+    networks:
+      - app-network
+    volumes:
+      - app-data:/app/data
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    networks:
+      - app-network
+
+volumes:
+  app-data:
+    driver: local
+  caddy-data:
+    driver: local
+  caddy-config:
+    driver: local
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true
