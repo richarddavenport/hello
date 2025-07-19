@@ -63,6 +63,9 @@ WORKDIR /app
 # Copy the release from builder stage
 COPY --from=builder --chown=app:app /app/_build/prod/rel/hello ./
 
+# Create data directory for SQLite database
+RUN mkdir -p /app/data && chown -R app:app /app/data
+
 # Switch to app user
 USER app
 
